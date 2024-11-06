@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   FRANCISCO GARZON / COMP 400C
  *
  *   This java file contains the problem solutions of isSubSet, findKthLargest,
  *   and sort2Arrays methods. You should utilize the Java Collection Framework for
@@ -32,9 +32,23 @@ class ProblemSolutions {
 
     public boolean isSubset(int list1[], int list2[]) {
 
-        // ADD YOU CODE HERE -- DON'T FORGET TO ADD YOR NAME AT TOP OF FILE
+        Set<Integer> setA = new HashSet<>();
 
-        return false;
+        // adding all the numbers from list1 to setA
+        for (int num : list1){
+            setA.add(num);
+
+        }
+        // check each number in list2
+        for (int num : list2){
+            // if the number isnt in setA, then list2 isnt a subset
+            if(!setA.contains(num)){
+                return false;
+            }
+        }
+
+        // if we didnt find any missing one, list2 is a subset
+        return true;
     }
 
 
@@ -53,9 +67,21 @@ class ProblemSolutions {
 
     public int findKthLargest(int[] array, int k) {
 
-        // ADD YOUR CODE HERE
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
 
-        return 0;
+        // loop through each num in the array
+        for (int num : array){
+
+            // then we add the nunmber to the heap
+            minHeap.add(num);
+
+            // if the heap has more than k, remove the smallest
+            if (minHeap.size() > k){
+                minHeap.poll();
+            }
+        }
+        // the top of the heap is the largest k number
+        return minHeap.peek();
     }
 
 
@@ -74,9 +100,20 @@ class ProblemSolutions {
 
     public int[] sort2Arrays(int[] array1, int[] array2) {
 
-        // ADD YOU CODE HERE
+        // new array to hold both of them
+        int[] bothArrays = new int[array1.length + array2.length];
 
-        return null;
+        //copy elements from the first array to both
+        System.arraycopy(array1,0,bothArrays,0,array1.length);
+
+        //copy elements from the second one to both
+        System.arraycopy(array2,0,bothArrays, array1.length, array2.length);
+
+        // sort them combined
+        Arrays.sort(bothArrays);
+
+        // return the sorted array
+        return bothArrays;
     }
 
 }

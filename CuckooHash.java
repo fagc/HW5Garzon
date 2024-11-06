@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Francisco Garzon COMP 400C
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -246,11 +246,52 @@ public class CuckooHash<K, V> {
 
  	public void put(K key, V value) {
 
-		// ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME AT TOP OF FILE.
-		// Also make sure you read this method's prologue above, it should help
-		// you. Especially the two HINTS in the prologue.
+		 // keeping count of shuffled elements
+		int shuffleCount = 0;
 
-		return;
+		K currentKey = key;
+		V currentValue = value;
+
+		// trying to first insert at the first hash position
+		int position = hash1(currentKey);
+
+		while (shuffleCount < CAPACITY){
+
+			// if the spot is empty, insert our key-value pair here
+			if (table[position] == null){
+				table[position] = new Bucket<>(currentKey, currentValue);
+				return;
+			}
+			// if the exact key pair is already in the table
+			if (table[position].getBucKey().equals(currentKey) && table[position].getValue().equals(currentValue)){
+				// dont need to insert again
+				return;
+			}
+
+			// as the spot is take, we can kick out the existing one
+			Bucket<K, V> misplacedBucket = table[position];
+			table[position] = new Bucket<>(currentKey, currentValue);
+
+			// and then proceed to try to find a new place for the misplaced item
+			currentKey = misplacedBucket.getBucKey();
+			currentValue = misplacedBucket.getValue();
+
+			// we can switch to the alternative hash funct to find the new position
+			if (position == hash1(currentKey)){
+				position = hash2(currentKey);
+			} else {
+				position = hash1(currentKey);
+			}
+
+			shuffleCount++;
+
+		}
+
+		// grow the table and start again after shuffling too many times (capacity almost full maybe)
+		rehash();
+
+		// and finally inserting the current key pairs again
+		put(currentKey,currentValue);
 	}
 
 
